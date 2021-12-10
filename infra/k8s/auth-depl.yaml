@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec:
+  replicas: 1
+  # This is step 1 in two step process. The purpose of the this step is to tell the deployment how to find all the pods that it is going to create
+  selector:
+    matchLabels:
+      app: auth
+  # This template right is here how to create each individual pod that this deployment is going to create
+  # This selector above is matching up this labels: app: auth name
+  template:
+    metadata:
+      labels:
+        app: auth
+    # This is gonna tell the pod how to behave
+    spec:
+      containers:
+        - name: auth
+          image: ugulzar4512/auth
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-srv
+# To tell the service how to behave
+spec:
+  # The default service that is created is cluster ip service, so we didn't have to define the specific type of service (cluster ip service is going to allow communication to the service from anything else running only inside of our cluster)
+  # The selectors is going to tell the service how to find the set of pods that is suppose to govern access to
+  selector:
+    app: auth
+  # List out the ports that are going to be exposed on that pod
+  ports:
+    - name: auth
+      protocol: TCP
+      # Our auth service is listening on port 3000 using express
+      port: 3000
+      targetPort: 3000
