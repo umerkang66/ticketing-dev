@@ -21,11 +21,13 @@ router.post(
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       // Handle error
-      // Don't forget to return it becuase if we don't, two res.send will happen that results in error
-      return res.status(400).send(errors.array());
+      throw new Error('Invalid email or password');
     }
 
-    const { email, password } = req.body;
+    console.log('Creating new user');
+
+    throw new Error('Error connecting to database');
+
     res.send({});
   }
 );
