@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { RequestValidationError } from '../errors/request-validation-error';
-import { DatabaseConnectionError } from '../errors/database-connection-error';
+import { CustomError } from '../errors/custom-error';
 
 // If any function has four arguments, express is going to recognize it as error handling middleware
 export const errorHandler = (
@@ -9,16 +8,14 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  if (err instanceof RequestValidationError) {
-    console.log('Handling this error as a request validation error');
+  if (err instanceof CustomError) {
+    // We have to explicitly return it
+    return res.status(err.statusCode).send({
+      errors: err.serializeErrors(),
+    });
   }
 
-  if (err instanceof DatabaseConnectionError) {
-    console.log('Handling this error as a db connection error');
-  }
-
-  // Here we have to send an consistent form of errors
-  res.status(400).send({
-    message: err.message,
+  res.status(500).send({
+    errors: [{ message: 'Something went wrong' }],
   });
 };
