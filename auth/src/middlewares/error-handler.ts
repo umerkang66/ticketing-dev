@@ -11,6 +11,7 @@ export const errorHandler = (
   if (err instanceof CustomError) {
     // We have to explicitly return it
     return res.status(err.statusCode).send({
+      // Serialize function will convert it in to an array of objects
       errors: err.serializeErrors(),
     });
   }
