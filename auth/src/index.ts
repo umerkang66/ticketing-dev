@@ -1,4 +1,5 @@
 import express from 'express';
+// The below package allows us to use the "throw" keyword in express async-route-handlers, without this package we have to use "next" function that is provided after "req" and "res" in the express route-handlers (this package is only for async route handlers, in sync route handlers throw keywork works just fine)
 import 'express-async-errors';
 import { json } from 'body-parser';
 import mongoose from 'mongoose';
