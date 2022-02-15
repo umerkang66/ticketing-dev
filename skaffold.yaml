@@ -7,7 +7,7 @@ deploy:
       # Here we list out all the directories or all the files we want to sink or make use of
       - ./infra/k8s/*
 build:
-  # This sets that whenever we build this does not push it to docker hub, (pushing it to the docker hub is default behaviour)
+  # This sets that whenever we build this does not push it to docker hub, (pushing it to the docker hub is default behavior)
   local:
     push: false
   artifacts:
@@ -25,5 +25,5 @@ build:
           # This is going to be set of files that skaffold needs to watch
           - src: 'src/**/*.ts'
             # The destination of DOT means where to sync this file to inside of our running container
-            # The dot means basically just take whereever the file was found from and throw it to the corresponding part inside the container
+            # The dot means basically just take wherever the file was found from and throw it to the corresponding part inside the container
             dest: .

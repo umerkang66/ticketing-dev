@@ -39,7 +39,7 @@ userSchema.pre('save', async function (done) {
     this.set('password', hashed);
   }
 
-  // We have to call done becasue of the async await syntax we are using
+  // We have to call done because of the async await syntax we are using
   done();
 });
 
