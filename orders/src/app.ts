@@ -10,10 +10,10 @@ import {
 } from '@ticketing-umer/common';
 
 // Routes
-import { createTicketRouter } from './routes/new';
-import { showTicketRouter } from './routes/show';
-import { indexTicketRouter } from './routes';
-import { updateTicketRouter } from './routes/update';
+import { newOrderRouter } from './routes/new';
+import { indexOrderRouter } from './routes/index';
+import { showOrderRouter } from './routes/show';
+import { deleteOrderRouter } from './routes/delete';
 
 const app = express();
 // traffic is being proxy to our server through ingress nginx, and trust the proxies
@@ -29,10 +29,10 @@ app.use(cookieSession({ signed: false, secure: isSecure }));
 app.use(currentUser);
 
 // Routes
-app.use(indexTicketRouter);
-app.use(showTicketRouter);
-app.use(createTicketRouter);
-app.use(updateTicketRouter);
+app.use(newOrderRouter);
+app.use(indexOrderRouter);
+app.use(showOrderRouter);
+app.use(deleteOrderRouter);
 
 app.all('*', (req, res) => {
   const errMsg = `'${req.method}: ${req.originalUrl}' does not found on this server`;

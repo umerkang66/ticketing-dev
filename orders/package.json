@@ -1,7 +1,7 @@
 {
-  "name": "tickets",
+  "name": "orders",
   "version": "1.0.0",
-  "description": "Tickets service of ticketing application",
+  "description": "Order service of ticketing application",
   "main": "index.js",
   "scripts": {
     "start": "ts-node-dev src/index.ts",

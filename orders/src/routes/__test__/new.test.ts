@@ -1,0 +1,56 @@
+import request from 'supertest';
+import mongoose from 'mongoose';
+import { app } from '../../app';
+import { Order, OrderStatus } from '../../models/order';
+import { Ticket } from '../../models/ticket';
+
+it("returns an error, if ticket doesn't exit", async () => {
+  const ticketId = new mongoose.Types.ObjectId();
+
+  await request(app)
+    .post('/api/orders')
+    .set('Cookie', getAuthCookie())
+    .send({ ticketId })
+    .expect(404);
+});
+
+it('returns an error, if the ticket is already reserved', async () => {
+  const ticket = Ticket.build({
+    title: 'first ticket',
+    price: 10,
+  });
+  await ticket.save();
+
+  const expiration = new Date();
+  expiration.setSeconds(expiration.getSeconds() + 15 * 60);
+
+  const order = Order.build({
+    ticket,
+    userId: 'random_id',
+    status: OrderStatus.Created,
+    expiresAt: expiration,
+  });
+  await order.save();
+
+  await request(app)
+    .post('/api/orders')
+    .set('Cookie', getAuthCookie())
+    .send({ ticketId: ticket.id })
+    .expect(400);
+});
+
+it('reserves a ticket', async () => {
+  const ticket = Ticket.build({
+    title: 'first ticket',
+    price: 10,
+  });
+  await ticket.save();
+
+  await request(app)
+    .post('/api/orders')
+    .set('Cookie', getAuthCookie())
+    .send({ ticketId: ticket.id })
+    .expect(201);
+});
+
+it.todo('emits an order created event', async () => {});
