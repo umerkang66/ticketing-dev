@@ -14,8 +14,6 @@
       "./src/test/setup.ts"
     ]
   },
-  "author": "Umer Kang",
-  "license": "ISC",
   "dependencies": {
     "@ticketing-umer/common": "^1.0.7",
     "@types/cookie-session": "^2.0.44",
@@ -38,5 +36,8 @@
     "mongodb-memory-server": "^8.7.2",
     "supertest": "^6.2.3",
     "ts-jest": "^28.0.4"
-  }
+  },
+  "keywords": [],
+  "author": "Umer Kang",
+  "license": "ISC"
 }

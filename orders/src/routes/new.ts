@@ -58,7 +58,8 @@ router.post('/api/orders', ...middle, async (req: Request, res: Response) => {
   });
   await order.save();
 
-  // Publish an event that order was created
+  // TODO: Publish an event that order was created
+
   res.status(201).send(order);
 });
 
