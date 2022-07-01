@@ -28,6 +28,7 @@ it('returns an error, if the ticket is already reserved', async () => {
     ticket,
     userId: 'random_id',
     status: OrderStatus.Created,
+    // expiration service will mark the status of Order to be expired, so we can assert the status in expiration test files
     expiresAt: expiration,
   });
   await order.save();
