@@ -17,9 +17,14 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
     msg: Message
   ): Promise<void> {
     const ticket = await Ticket.findById(data.id);
-
     if (!ticket) {
       throw new NotFoundError('Ticket not found');
     }
+
+    const { title, price } = data;
+    ticket.set({ title, price });
+    await ticket.save();
+
+    msg.ack();
   }
 }
