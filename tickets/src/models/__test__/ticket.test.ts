@@ -20,8 +20,15 @@ it('implements optimistic concurrency control', async () => {
   secondInstance!.set({ price: 10 });
 
   // save the first fetched ticket
+
   await firstInstance!.save();
 
   // save the second fetched ticket, (this thing should have outdated version number), and expect an error
-  await secondInstance!.save();
+  try {
+    await secondInstance!.save();
+  } catch (err) {
+    return;
+  }
+
+  throw new Error('Should not reach this point');
 });
