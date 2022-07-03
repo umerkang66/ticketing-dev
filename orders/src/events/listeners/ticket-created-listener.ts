@@ -18,6 +18,7 @@ export class TicketCreatedListener extends Listener<TicketCreatedEvent> {
 
     // Inside the build method, this "id" is converted into _id (required)
     const ticket = Ticket.build({ id, title, price });
+    // VERSION: on ticket created by ticket-service, the version will always be zero, so we don't need to add in Ticket.build, because update-if-current plugin will automatically set it to "0"
     await ticket.save();
 
     // we have process this event successfully

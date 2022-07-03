@@ -31,6 +31,7 @@ router.delete(
     new OrderCanceledPublisher(natsWrapper.client).publish({
       // Only these properties are required for cancel event to other services
       id: order.id,
+      version: order.version,
       ticket: { id: order.ticket.id },
     });
 

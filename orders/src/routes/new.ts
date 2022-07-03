@@ -67,6 +67,7 @@ router.post('/api/orders', ...middle, async (req: Request, res: Response) => {
     status: order.status,
     userId: order.userId,
     // this will automatically be turned into JSON before sending request, if stringify function will be called on Date obj, that will convert it into string, using the current time zone, so convert the date here in code
+    version: order.version,
     expiresAt: order.expiresAt.toISOString(),
     ticket: {
       id: ticket.id,

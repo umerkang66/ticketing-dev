@@ -16,15 +16,19 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
     data: TicketUpdatedEvent['data'],
     msg: Message
   ): Promise<void> {
-    const ticket = await Ticket.findById(data.id);
+    const ticket = await Ticket.findOne({
+      _id: data.id,
+      version: data.version - 1,
+    });
     if (!ticket) {
+      // After throwing the error, we didn't call the msg.ack(), then after 5 seconds, nats-server will send these events again
       throw new NotFoundError('Ticket not found');
     }
 
     const { title, price } = data;
     ticket.set({ title, price });
+    // after saving, the previous version that came from event, will be incremented and become equal to version that came from event
     await ticket.save();
-
     msg.ack();
   }
 }
