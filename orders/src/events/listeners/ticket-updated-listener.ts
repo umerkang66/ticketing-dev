@@ -26,8 +26,8 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
     }
 
     // we are not just incrementing version, but set to version that came from event
-    const { title, price } = data;
-    ticket.set({ title, price });
+    const { title, price, orderId } = data;
+    ticket.set({ title, price, orderId });
     // after saving, the previous version that came from event, will be incremented and become equal to version that came from event
     // if the version of current ticket is not less than data.version (less than 1 than updated ticket), ticket will not be saved, so don't add version manually
     await ticket.save();
