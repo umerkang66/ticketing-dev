@@ -2,6 +2,9 @@ import express from 'express';
 import 'express-async-errors';
 import cookieSession from 'cookie-session';
 
+// Routes
+import { createChargeRouter } from './routes/new';
+
 // Errors
 import {
   errorHandler,
@@ -21,6 +24,9 @@ const isSecure = process.env.NODE_ENV !== 'test';
 app.use(cookieSession({ signed: false, secure: isSecure }));
 
 app.use(currentUser);
+
+// Routes
+app.use(createChargeRouter);
 
 app.all('*', (req, res) => {
   const errMsg = `'${req.method}: ${req.originalUrl}' does not found on this server`;

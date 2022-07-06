@@ -19,8 +19,13 @@ export class ExpirationCompleteListener extends Listener<ExpirationCompleteEvent
     msg: Message
   ): Promise<void> {
     const order = await Order.findById(data.orderId).populate('ticket');
+
     if (!order) {
       throw new NotFoundError('Order not found');
+    }
+    if (order.status === OrderStatus.Complete) {
+      // if order is already completed return early and ack the message
+      return msg.ack();
     }
 
     // Once the order is canceled, ticket is no longer reserved, see the ticket.ts file in order service, don't remove the ticket on order

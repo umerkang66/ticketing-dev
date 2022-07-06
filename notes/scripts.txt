@@ -8,7 +8,8 @@ ticketing.dev ip address is coming from loadBalancer networking service of gcp, 
 # generic secret means this is just all kind of information generic secret
 
 kubectl create secret generic <secret_name> --from-literal=<key>=<value>
-kubectl create secret generic jwt-secret --from-literal=JWT_KEY=umer_kang_super_secure_key
+kubectl create secret generic jwt-secret --from-literal JWT_KEY=umer_kang_super_secure_key
+kubectl create secret generic stripe-secret --from-literal STRIPE_KEY=<stripe_secret_key>
 
 # PORT FORWARD BY kubectl
 kubectl port-forward <pod_name> <outside_port>:<pod_clusterIp_port>
