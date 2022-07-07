@@ -1,9 +1,4 @@
-import {
-  Listener,
-  NotFoundError,
-  OrderCanceledEvent,
-  Subjects,
-} from '@ticketing-umer/common';
+import { Listener, OrderCanceledEvent, Subjects } from '@ticketing-umer/common';
 import { Message } from 'node-nats-streaming';
 import { Ticket } from '../../models/ticket';
 import { queueGroupName } from './queue-group-name';
@@ -19,7 +14,7 @@ export class OrderCanceledListener extends Listener<OrderCanceledEvent> {
   ): Promise<void> {
     const ticket = await Ticket.findById(data.ticket.id);
     if (!ticket) {
-      throw new NotFoundError('Ticket not found');
+      throw new Error('Ticket not found');
     }
 
     // make the ticket unreserved

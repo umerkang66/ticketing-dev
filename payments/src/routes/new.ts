@@ -37,6 +37,8 @@ router.post(
     if (order.userId !== req.currentUser!.id) throw new NotAuthorizedError();
     if (order.status === OrderStatus.Canceled)
       throw new BadRequestError('Order is already canceled');
+    if (order.status === OrderStatus.Complete)
+      throw new BadRequestError('Order is already complete');
 
     // create charge, and amount is always defined at backend
     const charge = await stripe.charges.create({

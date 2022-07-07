@@ -1,25 +1,45 @@
-import buildClient from '../api/build-client';
+import Link from 'next/link';
 
-const LandingPage = ({ currentUser }) => {
-  return currentUser ? (
-    <h1>You are signed in</h1>
-  ) : (
-    <h1>You are NOT signed in</h1>
+const LandingPage = ({ currentUser, tickets }) => {
+  const ticketList = tickets.map(ticket => {
+    return (
+      <tr key={ticket.id}>
+        <td>{ticket.title}</td>
+        <td>{ticket.price}</td>
+        <td>
+          <Link href="/tickets/[ticketId]" as={`/tickets/${ticket.id}`}>
+            <a className="btn btn-secondary">View</a>
+          </Link>
+        </td>
+      </tr>
+    );
+  });
+
+  return (
+    <div>
+      <h1>Tickets</h1>
+      <table className="table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Link</th>
+          </tr>
+        </thead>
+
+        <tbody>{ticketList}</tbody>
+      </table>
+    </div>
   );
 };
 
 // this runs both on server and browser
-LandingPage.getInitialProps = async ({ req }) => {
-  // next server is running in container, so inside the container localhost:80 or k8sLoadBalancerIp:80 is nothing
-  // instead of this, we have to route this request to ingress nginx
+LandingPage.getInitialProps = async (context, client, currentUser) => {
+  const { data } = await client
+    .get('/api/tickets')
+    .catch(err => console.log(err));
 
-  const { data } = await buildClient({ req })
-    .get('/api/users/currentuser')
-    .catch(err => {
-      console.log(err.message);
-    });
-
-  return data;
+  return { tickets: data };
 };
 
 export default LandingPage;

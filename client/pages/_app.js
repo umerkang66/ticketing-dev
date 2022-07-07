@@ -11,10 +11,16 @@ const AppComponent = ({
   // whenever we try to go to distinct page in next-js, next will import the component from one of the different files of pages, then next js wraps it up with its own custom component before displaying it
 
   return (
-    <div className="container">
+    <div>
       <Header currentUser={currentUser} />
 
-      <Component {...pageProps} {...initialPageProps} />
+      <div className="container">
+        <Component
+          {...pageProps}
+          {...initialPageProps}
+          currentUser={currentUser}
+        />
+      </div>
     </div>
   );
 };
@@ -33,7 +39,9 @@ AppComponent.getInitialProps = async appContext => {
   let initialPageProps = {};
   if (appContext.Component.getInitialProps) {
     initialPageProps = await appContext.Component.getInitialProps(
-      appContext.ctx
+      appContext.ctx,
+      client,
+      data.currentUser
     );
   }
 

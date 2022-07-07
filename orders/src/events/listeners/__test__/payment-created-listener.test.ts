@@ -49,6 +49,21 @@ it('updates the order status to complete', async () => {
   expect(updatedOrder!.status).toBe(OrderStatus.Complete);
 });
 
+it('publishes the OrderCompleteEvent', async () => {
+  const { listener, order } = await setup();
+  await listener.listen();
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
+
+  const eventData = JSON.parse(
+    (natsWrapper.client.publish as jest.Mock).mock.calls[0][1]
+  );
+  expect(eventData.id).toBe(order.id);
+  expect(eventData.status).toBe(OrderStatus.Complete);
+  // once it is updates in onMessage call, version is increased by one
+  expect(eventData.version).toBe(order.version + 1);
+});
+
 it('ack the message', async () => {
   const { listener, msg } = await setup();
   await listener.listen();

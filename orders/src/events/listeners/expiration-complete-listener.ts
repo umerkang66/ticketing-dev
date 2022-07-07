@@ -2,7 +2,6 @@ import {
   Listener,
   ExpirationCompleteEvent,
   Subjects,
-  NotFoundError,
 } from '@ticketing-umer/common';
 import { Message } from 'node-nats-streaming';
 import { queueGroupName } from './queue-group-name';
@@ -21,7 +20,7 @@ export class ExpirationCompleteListener extends Listener<ExpirationCompleteEvent
     const order = await Order.findById(data.orderId).populate('ticket');
 
     if (!order) {
-      throw new NotFoundError('Order not found');
+      throw new Error('Order not found');
     }
     if (order.status === OrderStatus.Complete) {
       // if order is already completed return early and ack the message

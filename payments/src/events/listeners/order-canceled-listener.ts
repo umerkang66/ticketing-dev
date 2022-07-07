@@ -1,9 +1,4 @@
-import {
-  OrderCanceledEvent,
-  Subjects,
-  Listener,
-  NotFoundError,
-} from '@ticketing-umer/common';
+import { OrderCanceledEvent, Subjects, Listener } from '@ticketing-umer/common';
 import { Message } from 'node-nats-streaming';
 import { queueGroupName } from './queue-group-name';
 import { Order, OrderStatus } from '../../models/order';
@@ -21,7 +16,7 @@ export class OrderCanceledListener extends Listener<OrderCanceledEvent> {
       version: data.version,
     });
     if (!order) {
-      throw new NotFoundError('Order not found');
+      throw new Error('Order not found');
     }
 
     // set the order of payment service status to canceled

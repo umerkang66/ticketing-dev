@@ -1,10 +1,5 @@
 import { Message } from 'node-nats-streaming';
-import {
-  Subjects,
-  Listener,
-  TicketUpdatedEvent,
-  NotFoundError,
-} from '@ticketing-umer/common';
+import { Subjects, Listener, TicketUpdatedEvent } from '@ticketing-umer/common';
 import { Ticket } from '../../models/ticket';
 import { queueGroupName } from './queue-group-name';
 
@@ -22,7 +17,7 @@ export class TicketUpdatedListener extends Listener<TicketUpdatedEvent> {
     });
     if (!ticket) {
       // After throwing the error, we didn't call the msg.ack(), then after 5 seconds, nats-server will send these events again
-      throw new NotFoundError('Ticket not found');
+      throw new Error('Ticket not found');
     }
 
     // we are not just incrementing version, but set to version that came from event
