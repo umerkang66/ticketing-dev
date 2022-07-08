@@ -1,7 +1,9 @@
 name: tests-tickets
 on:
-  # only run on master
-  pull_request
+  # only run on pull request of where auth service changes
+  pull_request:
+    paths:
+      - 'tickets/**'
 jobs:
   build:
     # create a virtual machine
