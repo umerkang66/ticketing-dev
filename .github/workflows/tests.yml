@@ -1,0 +1,12 @@
+name: tests
+on:
+  # only run on master
+  pull_request
+jobs:
+  build:
+    # create a virtual machine
+    runs-on: ubuntu-latest
+    steps:
+      # take all the code of project
+      - uses: actions/checkout@v2
+      - run: cd auth && npm install && npm run test:ci
