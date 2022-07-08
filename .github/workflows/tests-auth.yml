@@ -1,4 +1,4 @@
-name: tests
+name: tests-auth
 on:
   # only run on master
   pull_request
