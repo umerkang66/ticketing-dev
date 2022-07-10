@@ -19,8 +19,13 @@ jobs:
       # log into docker
       - run: docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
         # this env is in same array entry
-        # tell this workflow to load these secrets
+        # tell this workflow to load these secrets, these secrets can be accessed directly if we are using it in this file, but we are using it in the environment of docker login command
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       - run: docker push ugulzar4512/ticketing-do-auth
+      - uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - run: doctl kubernetes cluster kubeconfig save ticketing-prod-cluster
+      - run: kubectl rollout restart deployment auth-depl
