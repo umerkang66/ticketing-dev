@@ -1,3 +1,4 @@
+# first time we send everything to master, so only "apply" command runs, not "rollout deployment" command, because they only runs on pull request
 name: deploy-manifests
 on:
   push:
