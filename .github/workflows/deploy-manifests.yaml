@@ -1,0 +1,22 @@
+name: deploy-manifests
+on:
+  push:
+    branches:
+      # whenever we close or merge a pull request in master branch, "push master" will run
+      - master
+    paths:
+      # only run this if auth directory changes
+      - 'infra/**'
+jobs:
+  build:
+    # ubuntu-latest comes with docker preinstalled
+    runs-on: ubuntu-latest
+    steps:
+      # checkout all of the code inside of repo
+      - uses: actions/checkout@v2
+      # install doctl
+      - uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - run: doctl kubernetes cluster kubeconfig save ticketing-prod-cluster
+      - run: kubectl apply -f infra/k8s
