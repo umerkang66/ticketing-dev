@@ -17,7 +17,7 @@ jobs:
       # build out the image and push to docker hub
       - run: cd auth && docker build -t ugulzar4512/ticketing-do-auth .
       # log into docker
-      - run: docker login -u "$DOCKER_USERNAME" -P "$DOCKER_PASSWORD"
+      - run: docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
         # this env is in same array entry
         # tell this workflow to load these secrets
         env:
