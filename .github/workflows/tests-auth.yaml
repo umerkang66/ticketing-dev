@@ -5,6 +5,7 @@ on:
     paths:
       - 'auth/**'
 jobs:
+  # "build" name of the job
   build:
     # create a virtual machine
     runs-on: ubuntu-latest

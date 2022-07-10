@@ -1,0 +1,26 @@
+name: deploy-auth
+on:
+  push:
+    branches:
+      # whenever we close or merge a pull request in master branch, "push master" will run
+      - master
+    paths:
+      # only run this if auth directory changes
+      - 'auth/**'
+jobs:
+  build:
+    # ubuntu-latest comes with docker preinstalled
+    runs-on: ubuntu-latest
+    steps:
+      # checkout all of the code inside of repo
+      - uses: actions/checkout@v2
+      # build out the image and push to docker hub
+      - run: cd auth && docker build -t ugulzar4512/ticketing-do-auth .
+      # log into docker
+      - run: docker login -u "$DOCKER_USERNAME" -P "$DOCKER_PASSWORD"
+        # this env is in same array entry
+        # tell this workflow to load these secrets
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker push ugulzar4512/ticketing-do-auth
