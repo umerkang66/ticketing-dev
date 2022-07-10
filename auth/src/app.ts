@@ -33,7 +33,7 @@ app.all('*', (req, res) => {
   throw new NotFoundError(errMsg);
 });
 
-// Error handler middleware
+// Error Handler Middleware
 app.use(errorHandler);
 
 export { app };
