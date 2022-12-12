@@ -1,3 +1,6 @@
+# this only runs if changes happens on master, but we will never change the this service on
+# master branch but we will create pull request for it (except for the first time, that time
+# this github action should not be exist)
 name: deploy-client
 on:
   push:
