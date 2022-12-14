@@ -7,7 +7,7 @@ on:
       # whenever we close or merge a pull request in master branch, "push master" will run
       - master
     paths:
-      # only run this if auth directory changes
+      # only run this if any object file in infra directory changes
       - 'infra/**'
 jobs:
   build:
