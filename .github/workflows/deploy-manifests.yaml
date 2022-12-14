@@ -10,6 +10,7 @@ on:
       # only run this if any object file in infra directory changes
       - 'infra/**'
 jobs:
+  # name of the job
   build:
     # ubuntu-latest comes with docker preinstalled
     runs-on: ubuntu-latest
