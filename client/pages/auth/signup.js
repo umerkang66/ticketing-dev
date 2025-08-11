@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import Router from 'next/router';
 import useRequest from '../../hooks/use-request';
+import { Form, Input, Button, Typography } from 'antd';
+
+const { Title } = Typography;
 
 const SignUp = () => {
   const [email, setEmail] = useState('');
@@ -13,42 +16,33 @@ const SignUp = () => {
     onSuccess: () => Router.push('/'),
   });
 
-  const onSubmit = async e => {
-    e.preventDefault();
+  const onFinish = () => {
     doRequest();
   };
 
   return (
-    <form onSubmit={onSubmit}>
-      <h1>Sign up</h1>
-      <div className="form-group">
-        <label htmlFor="email">Email address</label>
-        <input
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          type="email"
-          id="email"
-          className="form-control"
-        />
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="password">Password</label>
-        <input
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          type="password"
-          id="password"
-          className="form-control"
-        />
-      </div>
-
-      {errors}
-
-      <button type="submit" className="btn btn-primary">
-        Sign up
-      </button>
-    </form>
+    <div style={{ maxWidth: '400px', margin: '100px auto' }}>
+      <Title level={2} style={{ textAlign: 'center', marginBottom: '50px' }}>
+        Sign Up
+      </Title>
+      <Form onFinish={onFinish}>
+        <Form.Item label="Email">
+          <Input value={email} onChange={e => setEmail(e.target.value)} />
+        </Form.Item>
+        <Form.Item label="Password">
+          <Input.Password
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+          />
+        </Form.Item>
+        {errors}
+        <Form.Item>
+          <Button type="primary" htmlType="submit" block>
+            Sign Up
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
   );
 };
 

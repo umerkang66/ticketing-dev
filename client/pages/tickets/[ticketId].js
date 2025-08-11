@@ -1,5 +1,8 @@
 import Router from 'next/router';
 import useRequest from '../../hooks/use-request';
+import { Card, Button, Typography } from 'antd';
+
+const { Title, Paragraph } = Typography;
 
 const TicketShow = ({ ticket }) => {
   const { doRequest, errors } = useRequest({
@@ -10,13 +13,14 @@ const TicketShow = ({ ticket }) => {
   });
 
   return (
-    <div>
-      <h1>{ticket.title}</h1>
-      <h4>{ticket.price}</h4>
-      {errors}
-      <button onClick={() => doRequest()} className="btn btn-primary">
-        Purchase
-      </button>
+    <div style={{ maxWidth: '600px', margin: '100px auto' }}>
+      <Card title={ticket.title}>
+        <Title level={4}>Price: ${ticket.price}</Title>
+        {errors}
+        <Button type="primary" onClick={() => doRequest()}>
+          Purchase
+        </Button>
+      </Card>
     </div>
   );
 };

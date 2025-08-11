@@ -1,45 +1,53 @@
 import Link from 'next/link';
+import { Card, Col, Row, Typography, Button } from 'antd';
+
+const { Title, Paragraph } = Typography;
 
 const LandingPage = ({ currentUser, tickets }) => {
   const ticketList = tickets.map(ticket => {
     return (
-      <tr key={ticket.id}>
-        <td>{ticket.title}</td>
-        <td>{ticket.price}</td>
-        <td>
-          <Link href="/tickets/[ticketId]" as={`/tickets/${ticket.id}`}>
-            <a className="btn btn-secondary">View</a>
-          </Link>
-        </td>
-      </tr>
+      <Col xs={24} sm={12} md={8} key={ticket.id}>
+        <Card
+          title={ticket.title}
+          extra={
+            <Link href="/tickets/[ticketId]" as={`/tickets/${ticket.id}`}>
+              View
+            </Link>
+          }
+        >
+          <p>Price: ${ticket.price}</p>
+        </Card>
+      </Col>
     );
   });
 
   return (
     <div>
-      <h1>Tickets</h1>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Price</th>
-            <th>Link</th>
-          </tr>
-        </thead>
-
-        <tbody>{ticketList}</tbody>
-      </table>
+      <div
+        style={{
+          padding: '50px 0',
+          textAlign: 'center',
+        }}
+      >
+        <Title>Welcome to GitTickets</Title>
+        <Paragraph>The best place to buy and sell tickets online.</Paragraph>
+      </div>
+      <div style={{ padding: '20px 0' }}>
+        <Title level={2} style={{ textAlign: 'center', marginBottom: '50px' }}>
+          Available Tickets
+        </Title>
+        <Row gutter={[16, 16]}>{ticketList}</Row>
+      </div>
     </div>
   );
 };
 
-// this runs both on server and browser
 LandingPage.getInitialProps = async (context, client, currentUser) => {
   const { data } = await client
     .get('/api/tickets')
     .catch(err => console.log(err));
 
-  return { tickets: data };
+  return { tickets: data || [] };
 };
 
 export default LandingPage;

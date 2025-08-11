@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import useRequest from '../../hooks/use-request';
 import Router from 'next/router';
+import { Form, Input, Button, Typography, InputNumber } from 'antd';
+
+const { Title } = Typography;
 
 const NewTicket = () => {
   const [title, setTitle] = useState('');
@@ -13,51 +16,34 @@ const NewTicket = () => {
     onSuccess: () => Router.push('/'),
   });
 
-  const onSubmit = e => {
-    e.preventDefault();
+  const onFinish = () => {
     doRequest();
   };
 
-  const onBlur = () => {
-    const value = parseFloat(price);
-    if (isNaN(value)) {
-      return;
-    }
-    setPrice(value.toFixed(2));
-  };
-
   return (
-    <div>
-      <h1>Create a Ticket</h1>
-      <form onSubmit={onSubmit}>
-        <div className="form-group">
-          <label htmlFor="Title">Title</label>
-          <input
-            className="form-control"
-            type="text"
-            id="Title"
-            value={title}
-            onChange={e => setTitle(e.target.value)}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="Price">Price</label>
-          <input
-            className="form-control"
-            type="text"
-            id="Price"
+    <div style={{ maxWidth: '600px', margin: '100px auto' }}>
+      <Title level={2} style={{ textAlign: 'center', marginBottom: '50px' }}>
+        Create a Ticket
+      </Title>
+      <Form onFinish={onFinish}>
+        <Form.Item label="Title">
+          <Input value={title} onChange={e => setTitle(e.target.value)} />
+        </Form.Item>
+        <Form.Item label="Price">
+          <InputNumber
             value={price}
-            onChange={e => setPrice(e.target.value)}
-            onBlur={onBlur}
+            onChange={value => setPrice(value)}
+            formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            parser={value => value.replace(/\$\s?|(,*)/g, '')}
           />
-        </div>
-
+        </Form.Item>
         {errors}
-
-        <button type="submit" className="btn btn-primary">
-          Submit
-        </button>
-      </form>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
     </div>
   );
 };

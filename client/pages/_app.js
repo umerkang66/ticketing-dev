@@ -1,6 +1,9 @@
-import 'bootstrap/dist/css/bootstrap.css';
+import '../styles/globals.css';
+import Head from 'next/head';
 import buildClient from '../api/build-client';
 import Header from '../components/header';
+import { ConfigProvider } from 'antd';
+import theme from '../styles/theme';
 
 const AppComponent = ({
   Component,
@@ -8,12 +11,13 @@ const AppComponent = ({
   initialPageProps,
   currentUser,
 }) => {
-  // whenever we try to go to distinct page in next-js, next will import the component from one of the different files of pages, then next js wraps it up with its own custom component before displaying it
-
   return (
-    <div>
+    <ConfigProvider theme={theme}>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>GitTickets</title>
+      </Head>
       <Header currentUser={currentUser} />
-
       <div className="container">
         <Component
           {...pageProps}
@@ -21,16 +25,11 @@ const AppComponent = ({
           currentUser={currentUser}
         />
       </div>
-    </div>
+    </ConfigProvider>
   );
 };
 
-// this runs both on server and browser
 AppComponent.getInitialProps = async appContext => {
-  // next server is running in container, so inside the container localhost:80 or k8sLoadBalancerIp:80 is nothing
-  // instead of this, we have to route this request to ingress nginx
-
-  // ctx has req, and res properties
   const client = buildClient(appContext.ctx);
   const { data } = await client.get('/api/users/currentuser').catch(err => {
     console.log(err.message);

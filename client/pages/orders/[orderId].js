@@ -2,10 +2,13 @@ import { useEffect, useState } from 'react';
 import Router from 'next/router';
 import StripeCheckout from 'react-stripe-checkout';
 import useRequest from '../../hooks/use-request';
+import { Card, Typography, Alert, Button } from 'antd';
+
+const { Title, Text } = Typography;
 
 const OrderShow = ({ order, currentUser }) => {
   if (!order) {
-    return <h3>Order doesn't found</h3>;
+    return <Alert message="Order not found" type="error" />;
   }
 
   const [timeLeft, setTimeLeft] = useState(0);
@@ -22,7 +25,6 @@ const OrderShow = ({ order, currentUser }) => {
       setTimeLeft(Math.round(msLeft / 1000));
     };
 
-    // interval first time runs after 1000, if we want to show the time immediately we have to call this outside of setInterval
     findTimeLeft();
     const timerId = setInterval(findTimeLeft, 1000);
 
@@ -30,20 +32,25 @@ const OrderShow = ({ order, currentUser }) => {
   }, [order]);
 
   if (timeLeft < 0) {
-    return <div>Order Expired</div>;
+    return <Alert message="Order Expired" type="error" />;
   }
 
   return (
-    <div>
-      <div>Time left to pay: {timeLeft} seconds</div>
-      <div>{errors}</div>
-      <StripeCheckout
-        token={({ id }) => doRequest({ token: id })}
-        stripeKey="pk_test_51LIZXQKwal9gUIqn1AYzVhFnEtQLurAOdy6KEzSYsnFopKaiHbfhsuD7E97OvEAT2MZ569XNQCFmlwRtWL070h6I00zkKfTIUO"
-        // add the amount so we get back token that is also authorized to price, so if at the backend, we specify different price, it returns an error
-        amount={order.ticket * 100}
-        email={currentUser.email}
-      />
+    <div style={{ maxWidth: '600px', margin: '100px auto' }}>
+      <Card title="Order Summary">
+        <Title level={4}>Ticket: {order.ticket.title}</Title>
+        <Text>Price: ${order.ticket.price}</Text>
+        <div style={{ margin: '20px 0' }}>
+          <Text>Time left to pay: {timeLeft} seconds</Text>
+        </div>
+        {errors}
+        <StripeCheckout
+          token={({ id }) => doRequest({ token: id })}
+          stripeKey="pk_test_51LIZXQKwal9gUIqn1AYzVhFnEtQLurAOdy6KEzSYsnFopKaiHbfhsuD7E97OvEAT2MZ569XNQCFmlwRtWL070h6I00zkKfTIUO"
+          amount={order.ticket.price * 100}
+          email={currentUser.email}
+        />
+      </Card>
     </div>
   );
 };
